@@ -26,9 +26,9 @@ public class TestBase {
         RestAssured.baseURI = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
 
-        String SELENOID_URL = System.getProperty("selenoid_url");
-        String SELENOID_LOGIN = System.getProperty("selenoid_login");
-        String SELENOID_PASSWORD = System.getProperty("selenoid_password");
+        String SELENOID_URL = System.getProperty("selenoid.url");
+        String SELENOID_LOGIN = System.getProperty("selenoid.login");
+        String SELENOID_PASSWORD = System.getProperty("selenoid.password");
         Configuration.remote = "https://" + SELENOID_LOGIN + ":" + SELENOID_PASSWORD + "@" + SELENOID_URL + "/wd/hub";
 
 

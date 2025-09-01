@@ -16,9 +16,6 @@ public class UserResponseModel {
 
 
 
-    public List<BookItem> getBooks() {
-        return books;
-    }
 
     @Data
     @NoArgsConstructor

@@ -25,7 +25,13 @@ public class TestBase {
         Configuration.baseUrl = "https://demoqa.com";
         RestAssured.baseURI = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
-        Configuration.remote = "https://user1:1234@" + System.getProperty("selenoid.url") + "/wd/hub";
+
+        String SELENOID_URL = System.getProperty("selenoid_url");
+        String SELENOID_LOGIN = System.getProperty("selenoid_login");
+        String SELENOID_PASSWORD = System.getProperty("selenoid_password");
+        Configuration.remote = "https://" + SELENOID_LOGIN + ":" + SELENOID_PASSWORD + "@" + SELENOID_URL + "/wd/hub";
+
+
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,

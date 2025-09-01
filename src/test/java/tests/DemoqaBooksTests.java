@@ -69,6 +69,7 @@ public class DemoqaBooksTests extends TestBase {
 
         step("Удаление книги из коллекции через UI", () -> {
             profilePage.openPage()
+                    .removeBanner()
                     .checkUserName(login)
                     .clickOnDeleteBtn()
                     .clickOkInModal();

@@ -16,9 +16,13 @@ public class ProfilePage {
     @Step("Открыть страницу профиля")
     public ProfilePage openPage() {
         open("/profile");
+        return this;
+    }
+
+    @Step("Убрать баннеры")
+    public ProfilePage removeBanner() {
         executeJavaScript("$('#fixedban').remove()");
         executeJavaScript("$('footer').remove()");
-
         return this;
     }
 

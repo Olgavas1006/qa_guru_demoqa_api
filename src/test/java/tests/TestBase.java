@@ -19,26 +19,24 @@ public class TestBase {
 
     @BeforeAll
     static void setUp() {
-
         Configuration.browser = System.getProperty("browser", "chrome");
         Configuration.browserVersion = System.getProperty("version", "127.0");
         Configuration.browserSize = System.getProperty("windowSize", "1920x1080");
         Configuration.baseUrl = "https://demoqa.com";
         RestAssured.baseURI = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
-       // Configuration.remote = "https://user1:1234@" + System.getProperty("selenoid.url") + "/wd/hub";
+
+        // Получаем параметры из системы
         String SELENOID_URL = System.getProperty("selenoid.url");
         String SELENOID_LOGIN = System.getProperty("selenoid.login");
         String SELENOID_PASSWORD = System.getProperty("selenoid.password");
+
+        // Проверяем, что параметры не null
+        if (SELENOID_URL == null || SELENOID_LOGIN == null || SELENOID_PASSWORD == null) {
+            throw new RuntimeException("Selenoid credentials not provided! Set selenoid.url, selenoid.login, selenoid.password system properties");
+        }
+
         Configuration.remote = "https://" + SELENOID_LOGIN + ":" + SELENOID_PASSWORD + "@" + SELENOID_URL + "/wd/hub";
-
-
-        Callable<Object> callable = new Callable<Object>() {
-            public Object call() throws Exception {
-
-
-            }
-        };
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
@@ -52,7 +50,6 @@ public class TestBase {
 
     @BeforeEach
     void addListener() {
-
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
@@ -64,5 +61,5 @@ public class TestBase {
         Attach.addVideo();
         Selenide.closeWebDriver();
     }
-    }
+}
 

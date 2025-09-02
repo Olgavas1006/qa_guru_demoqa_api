@@ -19,9 +19,7 @@ public class TestBase {
 
     @BeforeAll
     static void setUp() {
-        Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.browserVersion = System.getProperty("version", "127.0");
-        Configuration.browserSize = System.getProperty("windowSize", "1920x1080");
+
         Configuration.baseUrl = "https://demoqa.com";
         RestAssured.baseURI = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
@@ -30,17 +28,25 @@ public class TestBase {
         String SELENOID_LOGIN = System.getProperty("selenoid.login");
         String SELENOID_PASSWORD = System.getProperty("selenoid.password");
 
+        boolean isRemoteRun = SELENOID_URL != null && SELENOID_LOGIN != null && SELENOID_PASSWORD != null;
 
-        Configuration.remote = "https://" + SELENOID_LOGIN + ":" + SELENOID_PASSWORD + "@" + SELENOID_URL + "/wd/hub";
+        if (isRemoteRun) {
+            Configuration.remote = "https://" + SELENOID_LOGIN + ":" + SELENOID_PASSWORD + "@" + SELENOID_URL + "/wd/hub";
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
-                "enableVNC", true,
-                "enableVideo", true,
-                "videoCodec", "libx264",
-                "videoFrameRate", 24
-        ));
-        Configuration.browserCapabilities = capabilities;
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability("selenoid:options", Map.<String, Object>of(
+                    "enableVNC", true,
+                    "enableVideo", true,
+                    "videoCodec", "libx264",
+                    "videoFrameRate", 24
+            ));
+            Configuration.browserCapabilities = capabilities;
+
+            System.out.println("Running tests remotely in Selenoid");
+        } else {
+            Configuration.remote = null;
+            System.out.println("Running tests locally");
+        }
     }
 
     @BeforeEach

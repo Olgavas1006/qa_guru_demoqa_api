@@ -26,15 +26,10 @@ public class TestBase {
         RestAssured.baseURI = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
 
-        // Получаем параметры из системы
         String SELENOID_URL = System.getProperty("selenoid.url");
         String SELENOID_LOGIN = System.getProperty("selenoid.login");
         String SELENOID_PASSWORD = System.getProperty("selenoid.password");
 
-        // Проверяем, что параметры не null
-        if (SELENOID_URL == null || SELENOID_LOGIN == null || SELENOID_PASSWORD == null) {
-            throw new RuntimeException("Selenoid credentials not provided! Set selenoid.url, selenoid.login, selenoid.password system properties");
-        }
 
         Configuration.remote = "https://" + SELENOID_LOGIN + ":" + SELENOID_PASSWORD + "@" + SELENOID_URL + "/wd/hub";
 

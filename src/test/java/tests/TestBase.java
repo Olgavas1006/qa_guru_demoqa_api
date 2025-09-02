@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 
 public class TestBase {
@@ -25,8 +26,19 @@ public class TestBase {
         Configuration.baseUrl = "https://demoqa.com";
         RestAssured.baseURI = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
-        Configuration.remote = "https://user1:1234@" + System.getProperty("selenoid.url") + "/wd/hub";
+       // Configuration.remote = "https://user1:1234@" + System.getProperty("selenoid.url") + "/wd/hub";
+        String SELENOID_URL = System.getProperty("selenoid.url");
+        String SELENOID_LOGIN = System.getProperty("selenoid.login");
+        String SELENOID_PASSWORD = System.getProperty("selenoid.password");
+        Configuration.remote = "https://" + SELENOID_LOGIN + ":" + SELENOID_PASSWORD + "@" + SELENOID_URL + "/wd/hub";
 
+
+        Callable<Object> callable = new Callable<Object>() {
+            public Object call() throws Exception {
+
+
+            }
+        };
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(

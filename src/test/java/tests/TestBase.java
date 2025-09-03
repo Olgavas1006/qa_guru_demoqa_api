@@ -12,8 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
-import java.util.concurrent.Callable;
-
 
 public class TestBase {
 

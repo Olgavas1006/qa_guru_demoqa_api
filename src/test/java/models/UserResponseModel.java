@@ -14,9 +14,6 @@ public class UserResponseModel {
     public String userId, username;
     public List<BookItem> books;
 
-
-
-
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

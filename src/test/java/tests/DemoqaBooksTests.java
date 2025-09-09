@@ -1,9 +1,8 @@
 package tests;
 
-import api.AuthorizationApi;
+import api.AccountApi;
 import api.BookStoreApi;
-import api.CookieManager;
-import api.UserApi;
+import helpers.AuthHelper;
 import models.AddBookBodyModel;
 import models.LoginBodyModel;
 import models.LoginResponseModel;
@@ -20,18 +19,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DemoqaBooksTests extends TestBase {
 
+    ProfilePage profilePage = new ProfilePage();
+    AccountApi accountApi = new AccountApi();
+    BookStoreApi bookStoreApi = new BookStoreApi();
+    AuthHelper authHelper = new AuthHelper();
+
     @Test
     @DisplayName("Добавление и удаление книги из коллекции")
     void addAndDeleteBookTest() {
-        ProfilePage profilePage = new ProfilePage();
-        AuthorizationApi authorizationApi = new AuthorizationApi();
-        BookStoreApi bookStoreApi = new BookStoreApi();
-        CookieManager cookieManager = new CookieManager();
-        LoginBodyModel credentials = new LoginBodyModel(login, password);
-        UserApi userApi = new UserApi();
+
+        LoginBodyModel credentials = new LoginBodyModel(userName, password);
 
         LoginResponseModel authResponse = step("Запрос на авторизацию", () ->
-                authorizationApi.login(credentials, request)
+                accountApi.login(credentials, request)
         );
 
         step("Удаление всех книг из коллекции пользователя", () ->
@@ -44,17 +44,17 @@ public class DemoqaBooksTests extends TestBase {
         );
 
         step("Добавление книги в коллекцию пользователя", () ->
-            bookStoreApi.addBook(addBookData, authResponse.getToken(), request)
+                bookStoreApi.addBook(addBookData, authResponse.getToken(), request)
         );
 
-        step("Установка cookies", () ->
-                cookieManager.setAuthCookies(authResponse)
+        step("Авторизация через cookies", () ->
+                authHelper.setAuthCookies(authResponse)
         );
 
         step("Удаление книги из коллекции через UI", () -> {
             profilePage.openPage()
                     .removeBanner()
-                    .checkUserName(login)
+                    .checkUserName(userName)
                     .clickOnDeleteBtn()
                     .clickOkInModal();
             confirm();
@@ -62,7 +62,7 @@ public class DemoqaBooksTests extends TestBase {
         });
 
         UserResponseModel userResponse = step("Запрос информации о пользователе", () ->
-                userApi.getUserInfo(authResponse.getToken(), authResponse.getUserId(), request)
+                accountApi.getUserInfo(authResponse.getToken(), authResponse.getUserId(), request)
         );
 
         step("Проверка, что коллекция книг пуста", () -> {
@@ -70,8 +70,8 @@ public class DemoqaBooksTests extends TestBase {
                     .as("Проверка, что коллекция книг пользователя пуста")
                     .isEmpty();
         });
-
     }
+
 }
 
 

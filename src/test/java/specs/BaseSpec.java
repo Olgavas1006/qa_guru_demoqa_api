@@ -1,19 +1,22 @@
 package specs;
 
+
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
 import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.restassured.RestAssured.with;
-import static io.restassured.http.ContentType.JSON;
+
 
 public class BaseSpec {
+
     public static RequestSpecification request  = with()
             .filter(withCustomTemplates())
-            .log().all()
-            .contentType(JSON);
+            .contentType(ContentType.JSON)
+            .log().all();
 
 
     public static ResponseSpecification responseSpec(int expectedStatusCode) {
